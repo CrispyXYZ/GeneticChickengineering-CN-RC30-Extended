@@ -7,13 +7,12 @@ package space.kiichan.geneticchickengineering.adapter;
  * dependency
  */
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -48,13 +47,13 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
         lore.add(ChatColor.GRAY + "血量: " + ChatColor.GREEN + json.get("_health").getAsDouble());
 
         if (!json.get("_customName").isJsonNull()) {
-            lore.add(ChatColor.GRAY + "名稱: " + ChatColor.RESET + json.get("_customName").getAsString());
+            lore.add(ChatColor.GRAY + "名称: " + ChatColor.RESET + json.get("_customName").getAsString());
         }
 
         int fireTicks = json.get("_fireTicks").getAsInt();
 
         if (fireTicks > 0) {
-            lore.add(ChatColor.GRAY + "著火: " + ChatColor.RESET + "true");
+            lore.add(ChatColor.GRAY + "着火: " + ChatColor.RESET + "true");
         }
 
         return lore;
@@ -76,22 +75,39 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
         return new JsonParser().parse(primitive).getAsJsonObject();
     }
 
+    Logger getLogger();
+
     default void apply(T entity, JsonObject json) {
         // We need to apply Attributes before the health.
         JsonObject attributes = json.getAsJsonObject("_attributes");
 
         for (Map.Entry<String, JsonElement> entry : attributes.entrySet()) {
-            AttributeInstance instance = entity.getAttribute(Attribute.valueOf(entry.getKey()));
+            NamespacedKey namespacedKey = NamespacedKey.fromString(entry.getKey());
+            if (namespacedKey == null) {
+                namespacedKey = convertOldAttribute(entry.getKey());
+            }
+            if (namespacedKey == null) {
+                getLogger().warning("Could not convert " + entry.getKey() + " to a namespaced key, skipping it.");
+                continue;
+            }
+
+            Attribute attribute = Registry.ATTRIBUTE.get(namespacedKey);
+            if (attribute == null) {
+                getLogger().warning("Unrecognizable attribute " + namespacedKey.asString() + ", skipping it.");
+                continue;
+            }
+
+            AttributeInstance instance = entity.getAttribute(attribute);
 
             if (instance != null) {
                 for (AttributeModifier modifier : new ArrayList<>(instance.getModifiers())) {
                     instance.removeModifier(modifier);
                 }
 
-                JsonObject attribute = entry.getValue().getAsJsonObject();
-                instance.setBaseValue(attribute.get("base").getAsDouble());
+                JsonObject attributeJSON = entry.getValue().getAsJsonObject();
+                instance.setBaseValue(attributeJSON.get("base").getAsDouble());
 
-                JsonArray modifiers = attribute.getAsJsonArray("modifiers");
+                JsonArray modifiers = attributeJSON.getAsJsonArray("modifiers");
 
                 for (JsonElement modifier : modifiers) {
                     JsonObject obj = modifier.getAsJsonObject();
@@ -146,6 +162,16 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
         }
     }
 
+    private NamespacedKey convertOldAttribute(String oldAttribute) {
+        String inner = oldAttribute.substring(oldAttribute.indexOf('[')+1, oldAttribute.lastIndexOf(']'));
+        if (inner.contains("]")) {
+            getLogger().warning("Conversion failed. Old attribute: " + oldAttribute);
+            return null;
+        }
+        String newAttribute = inner.substring(inner.indexOf('/')+1).trim();
+        return NamespacedKey.fromString(newAttribute);
+    }
+
     default JsonObject saveData(T entity) {
         JsonObject json = new JsonObject();
 
@@ -165,7 +191,7 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
 
         JsonObject attributes = new JsonObject();
 
-        for (Attribute attribute : Attribute.values()) {
+        for (Attribute attribute : Registry.ATTRIBUTE) {
             AttributeInstance instance = entity.getAttribute(attribute);
 
             if (instance != null) {
@@ -183,7 +209,7 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
                 }
 
                 obj.add("modifiers", modifiers);
-                attributes.add(attribute.toString(), obj);
+                attributes.add(attribute.getKey().asString(), obj);
             }
         }
 

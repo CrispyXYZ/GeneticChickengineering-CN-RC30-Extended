@@ -31,7 +31,7 @@ import java.util.Optional;
 
 public class PocketChicken<T extends LivingEntity> extends SimpleSlimefunItem<ItemUseHandler> implements NotPlaceable, DistinctiveItem {
 
-    private final AnimalsAdapter<Chicken> adapter = new AnimalsAdapter<>(Chicken.class);
+    private final AnimalsAdapter<Chicken> adapter;
     private final NamespacedKey adapterkey;
     private final NamespacedKey dnakey;
     public GeneticChickengineering plugin;
@@ -42,6 +42,7 @@ public class PocketChicken<T extends LivingEntity> extends SimpleSlimefunItem<It
     public PocketChicken(GeneticChickengineering plugin, ItemGroup category, SlimefunItemStack item, int mutationRate, int maxMutation, boolean displayResources, NamespacedKey dnakey, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
         this.plugin = plugin;
+        this.adapter = new AnimalsAdapter<>(Chicken.class, plugin.getLogger());
         this.adapterkey = new NamespacedKey(plugin, "gce_pocket_chicken_adapter");
         this.dnakey = dnakey;
         this.mutationRate = mutationRate;
@@ -51,6 +52,7 @@ public class PocketChicken<T extends LivingEntity> extends SimpleSlimefunItem<It
     public PocketChicken(GeneticChickengineering plugin, ItemGroup category, SlimefunItemStack item, int mutationRate, int maxMutation, boolean displayResources, NamespacedKey adapterkey, NamespacedKey dnakey, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
         this.plugin = plugin;
+        this.adapter = new AnimalsAdapter<>(Chicken.class, plugin.getLogger());
         this.adapterkey = adapterkey;
         this.dnakey = dnakey;
         this.mutationRate = mutationRate;

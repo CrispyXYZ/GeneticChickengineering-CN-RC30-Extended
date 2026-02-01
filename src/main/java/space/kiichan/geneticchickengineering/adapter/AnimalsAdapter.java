@@ -8,6 +8,7 @@ package space.kiichan.geneticchickengineering.adapter;
  */
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Animals;
@@ -17,9 +18,11 @@ import com.google.gson.JsonObject;
 public class AnimalsAdapter<T extends Animals> implements MobAdapter<T> {
 
     private final Class<T> entityClass;
+    private final Logger logger;
 
-    public AnimalsAdapter(Class<T> entityClass) {
+    public AnimalsAdapter(Class<T> entityClass, Logger logger) {
         this.entityClass = entityClass;
+        this.logger = logger;
     }
 
     @Override
@@ -33,6 +36,11 @@ public class AnimalsAdapter<T extends Animals> implements MobAdapter<T> {
         }
 
         return lore;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return logger;
     }
 
     @Override
