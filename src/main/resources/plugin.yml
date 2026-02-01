@@ -12,7 +12,7 @@ depend: [Slimefun]
 
 version: ${project.version}
 
-api-version: 1.16
+api-version: 1.21
 
 commands:
     geneticchickengineering:

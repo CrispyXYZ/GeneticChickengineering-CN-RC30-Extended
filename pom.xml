@@ -8,8 +8,8 @@
     <version>1.2.1</version>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -23,8 +23,8 @@
 
     <repositories>
         <repository>
-            <id>paper-repo</id>
-            <url>https://repo.destroystokyo.com/repository/maven-public/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
 
         <repository>
@@ -40,6 +40,11 @@
         <repository>
             <id>sqlite-jdbc</id>
             <url>https://repo1.maven.org/</url>
+        </repository>
+
+        <repository>
+            <id>gugu-maven-repo</id>
+            <url>https://maven.norain.city/releases</url>
         </repository>
     </repositories>
 
@@ -86,17 +91,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.21.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        
+
 
         <dependency>
-            <groupId>com.github.StarWishsama</groupId>
+            <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>2024.3</version>
+            <version>2025.1.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -106,12 +111,12 @@
             <version>3.41.2.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.7</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.papermc</groupId>-->
+<!--            <artifactId>paperlib</artifactId>-->
+<!--            <version>1.0.7</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
     

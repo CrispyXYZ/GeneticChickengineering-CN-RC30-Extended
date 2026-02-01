@@ -9,7 +9,7 @@ import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import io.papermc.lib.PaperLib;
+import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -108,7 +108,7 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
             new ItemStack(Material.COBBLESTONE), SlimefunItems.ADVANCED_CIRCUIT_BOARD, new ItemStack(Material.COBBLESTONE)});
         ExcitationChamber excitationChamber = new ExcitationChamber(this, category, GCEItems.EXCITATION_CHAMBER, resFailRate, resBaseTime, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
             new ItemStack(Material.BLACKSTONE), SlimefunItems.SMALL_CAPACITOR, new ItemStack(Material.BLACKSTONE),
-            new ItemStack(Material.CHAIN), null, new ItemStack(Material.CHAIN),
+            new ItemStack(Material.IRON_CHAIN), null, new ItemStack(Material.IRON_CHAIN),
             new ItemStack(Material.STONE), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.STONE)});
         ExcitationChamber excitationChamber2 = new ExcitationChamber(this, category, GCEItems.EXCITATION_CHAMBER_2, resFailRate, resBaseTime, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
             SlimefunItems.LEAD_INGOT, SlimefunItems.BLISTERING_INGOT_3, SlimefunItems.LEAD_INGOT,
