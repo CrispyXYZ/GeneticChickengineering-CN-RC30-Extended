@@ -23,6 +23,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
+          distribution: jdk
       
       - name: submodules-init
         uses: snickerbockers/submodules-init@v4
