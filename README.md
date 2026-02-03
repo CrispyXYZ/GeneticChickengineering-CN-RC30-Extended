@@ -4,8 +4,6 @@
 需求：
 - Paper 服务端
 - Java≥17
-
-受支持的版本：
 - Minecraft≥1.21.3
 
 Extended版新增内容：
