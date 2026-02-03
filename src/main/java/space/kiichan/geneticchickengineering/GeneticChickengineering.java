@@ -12,6 +12,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -57,10 +58,17 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
     @Override
     public void onEnable() {
         this.log = this.getLogger();
-        
-        if (!PaperLib.isPaper()) {
-            this.log.severe("GCE must be run on a Paper server because it uses Paper-specific API calls.");
-            this.log.severe("This server doesn't appear understand Paper API, so GCE will be disabled.");
+
+        boolean isPaper = PaperLib.isPaper();
+        boolean isSupportedVersion = SlimefunExtended.getMinecraftVersion().isAtLeast(1, 21, 3);
+
+        if (!isPaper || !isSupportedVersion) {
+            if (!isPaper) this.log.severe("鸡因工程必须在 Paper 及其扩展服务端上运行，此服务器不支持 Paper");
+            if (!isSupportedVersion) this.log.severe("鸡因工程支持的最低 Minecraft 版本为 1.21.3，此服务器不满足此需求");
+            this.log.severe("本插件将被禁用");
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                getServer().getPluginManager().disablePlugin(this);
+            }, 1L);
             return;
         }
         
@@ -163,6 +171,7 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
 
     @Override
     public void onDisable() {
+        if (db==null) return;
         this.cleanUpDB();
         this.db.close();
     }
