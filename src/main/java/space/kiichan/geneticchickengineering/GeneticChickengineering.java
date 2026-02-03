@@ -1,5 +1,6 @@
 package space.kiichan.geneticchickengineering;
 
+import city.norain.slimefun4.SlimefunExtended;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -108,7 +109,7 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
             new ItemStack(Material.COBBLESTONE), SlimefunItems.ADVANCED_CIRCUIT_BOARD, new ItemStack(Material.COBBLESTONE)});
         ExcitationChamber excitationChamber = new ExcitationChamber(this, category, GCEItems.EXCITATION_CHAMBER, resFailRate, resBaseTime, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
             new ItemStack(Material.BLACKSTONE), SlimefunItems.SMALL_CAPACITOR, new ItemStack(Material.BLACKSTONE),
-            new ItemStack(Material.IRON_CHAIN), null, new ItemStack(Material.IRON_CHAIN),
+            new ItemStack(getChainMaterial()), null, new ItemStack(getChainMaterial()),
             new ItemStack(Material.STONE), SlimefunItems.ELECTRIC_MOTOR, new ItemStack(Material.STONE)});
         ExcitationChamber excitationChamber2 = new ExcitationChamber(this, category, GCEItems.EXCITATION_CHAMBER_2, resFailRate, resBaseTime, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
             SlimefunItems.LEAD_INGOT, SlimefunItems.BLISTERING_INGOT_3, SlimefunItems.LEAD_INGOT,
@@ -176,6 +177,10 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
         return this;
     }
 
+    private Material getChainMaterial() {
+        if (SlimefunExtended.getMinecraftVersion().isAtLeast(1, 21, 9)) return Material.IRON_CHAIN;
+        else return Material.valueOf("CHAIN");
+    }
 
     private int clamp(int low, int value, int high) {
         return Math.min(Math.max(low, value), high);
