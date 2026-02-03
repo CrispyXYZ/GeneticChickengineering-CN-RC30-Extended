@@ -2,8 +2,9 @@
 ***
 
 需求：
-- Minecraft 版本≥1.21.3
 - Paper 服务端
+- Java≥17
+- Minecraft≥1.21.3
 
 Extended版新增内容：
 - 终极鼓舞室（速度x10）
@@ -18,7 +19,7 @@ Extended版新增内容：
 </p>
 
 
-![License](https://img.shields.io/github/license/kii-chan-reloaded/GeneticChickengineering)
+![License](https://img.shields.io/github/license/CrispyXYZ/GeneticChickengineering-CN-RC30-Extended)
 
 鸡因工程是资源鸡的实现基础，其灵感来自于 SetyCz 流行的 Forge mod Chicken。
 
