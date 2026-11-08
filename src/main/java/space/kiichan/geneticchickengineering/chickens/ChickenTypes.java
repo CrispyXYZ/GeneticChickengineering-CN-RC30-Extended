@@ -94,6 +94,15 @@ public final class ChickenTypes {
         }
     };
 
+    /**
+     * 返回 typemap 中的原始条目。
+     * <p>
+     * <strong>危险</strong>：返回值直接指向内部数组，调用方拿到其中的
+     * {@code ItemStack}（即 {@link #getResource(int)} 的底层单例）后若加以改写，
+     * 会污染全局资源表。请改用 {@link #getName(int)} / {@link #getResource(int)}。
+     * <p>
+     * 当前全仓无调用者，保留仅为兼容可能存在的外部调用。
+     */
     public static final Object[] get(int typing) {
         return typemap.get(typing);
     }
@@ -102,8 +111,17 @@ public final class ChickenTypes {
         return (String) typemap.get(typing)[0];
     }
 
+    /**
+     * 返回该基因型对应资源的<strong>独立副本</strong>。
+     * <p>
+     * typemap 里保存的是全局唯一的 ItemStack 实例。若直接返回引用，调用方
+     * （SlimefunItemStack 构造器、机器进度条缓存、乃至其他插件改写 ItemMeta）
+     * 一旦往里写入 PersistentDataContainer，污染就会永久留在单例上：此后所有
+     * 「泥土鸡/圆石鸡」产出的原版方块都会带上 GCE 的 SF 元数据，进而被识别成
+     * 「鸡因工程产品」分类里的物品。
+     */
     public static final ItemStack getResource(int typing) {
-        return (ItemStack) typemap.get(typing)[1];
+        return ((ItemStack) typemap.get(typing)[1]).clone();
     }
 
     public static final void registerChickens(Research research, PocketChicken<LivingEntity> pc, ItemGroup category, RecipeType rt) {

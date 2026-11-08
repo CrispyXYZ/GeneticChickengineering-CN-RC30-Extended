@@ -1,4 +1,11 @@
-target
+# 构建产物（Maven）
+target/
 dependency-reduced-pom.xml
-.idea
+
+# IDE
+.idea/
 *.iml
+
+# 本地 agent / 工具数据（非源码，不纳入版本控制）
+.workbuddy/
+tools/

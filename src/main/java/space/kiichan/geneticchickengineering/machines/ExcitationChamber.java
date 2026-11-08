@@ -30,10 +30,19 @@ public class ExcitationChamber extends AContainer {
     private GeneticChickengineering plugin;
     private final PocketChicken pc;
     private ItemStack currentResource;
-    public static Map<BlockMenu, ItemStack> resources = new HashMap<>();
+    private static final Map<BlockMenu, ItemStack> resources = new HashMap<>();
     private static final ItemStack blackPane = createSimpleItem(Material.BLACK_STAINED_GLASS_PANE, "&r&0 ");
     private int failRate;
     private int baseTime;
+
+    /**
+     * 清理进度条图标缓存。该Map 以 BlockMenu 为键且跨所有鼓舞室实例共享，
+     * 插件卸载时必须清空，否则热重载会残留旧的 BlockMenu 引用（内存泄漏），
+     * 且其中缓存的 ItemStack 可能把已失效的 SF 元数据带入新一次运行。
+     */
+    public static void clearResourceCache() {
+        resources.clear();
+    }
 
     public ExcitationChamber(GeneticChickengineering plugin, ItemGroup category, SlimefunItemStack item, int failRate, int baseTime, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
@@ -64,7 +73,23 @@ public class ExcitationChamber extends AContainer {
 
     @Override
     public ItemStack getProgressBar() {
-        return this.currentResource;
+        /* 返回副本：Slimefun 在渲染进度条时可能改写 ItemMeta，
+         * 直接把缓存里的资源图标交出去会把它污染成 SF 物品。
+         *
+         * 重要：AContainer 的构造器（AContainer.java:79）会在本类字段初始化之前
+         * 就回调本方法，此时 this.currentResource 仍是 null。若直接 clone()
+         * 会抛 NullPointerException，导致插件在 onEnable 构造本机器时加载失败。
+         *
+         * 因此做惰性兜底：构造期返回 blackPane 的副本。blackPane 是 static final，
+         * 类加载时即已就绪（static 初始化先于任何实例构造），构造期内安全可用；
+         * 且与构造器体执行后「this.currentResource = blackPane.clone()」的初始状态
+         * 完全一致，不会改变「无资源时进度条显示为黑玻璃」的原有表现。
+         */
+        ItemStack resource = this.currentResource;
+        if (resource == null) {
+            resource = this.blackPane;
+        }
+        return resource != null ? resource.clone() : null;
     }
 
     @Override

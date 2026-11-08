@@ -107,6 +107,10 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
         ItemStack[] nullRecipe = new ItemStack[] { null, null, null, null, null, null, null, null, null };
 
         this.pocketChicken = new PocketChicken<LivingEntity>(this, category, GCEItems.POCKET_CHICKEN, mutationRate, maxMutation, displayResources, dnakey, new RecipeType(new NamespacedKey(this, "gce_from_net"), new CustomItemStack(GCEItems.CHICKEN_NET,"§r§f用§a鸡网§f捕捉", "§r§f或在§e私人鸡舍§f内繁殖")), nullRecipe);
+        // 图鉴图标隔离：开启后 64 种图标不再直接使用原版方块材质
+        if (cfg.getOrSetDefault("options.isolate-guide-icons", true)) {
+            this.pocketChicken.setIconBaseMaterial(Material.PLAYER_HEAD);
+        }
         ChickenNet chickenNet = new ChickenNet(this, category, GCEItems.CHICKEN_NET, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{
             null, new ItemStack(Material.STRING), new ItemStack(Material.STRING),
             null, new ItemStack(Material.STICK), new ItemStack(Material.STRING),
@@ -171,6 +175,8 @@ public class GeneticChickengineering extends JavaPlugin implements SlimefunAddon
 
     @Override
     public void onDisable() {
+        // 无论数据库是否可用都要清理进度条缓存，否则热重载会残留旧的 BlockMenu 引用
+        ExcitationChamber.clearResourceCache();
         if (db==null) return;
         this.cleanUpDB();
         this.db.close();

@@ -53,7 +53,7 @@ public interface MobAdapter<T extends LivingEntity> extends PersistentDataType<S
         int fireTicks = json.get("_fireTicks").getAsInt();
 
         if (fireTicks > 0) {
-            lore.add(ChatColor.GRAY + "着火: " + ChatColor.RESET + "true");
+            lore.add(ChatColor.GRAY + "着火: " + ChatColor.RESET + "是");
         }
 
         return lore;

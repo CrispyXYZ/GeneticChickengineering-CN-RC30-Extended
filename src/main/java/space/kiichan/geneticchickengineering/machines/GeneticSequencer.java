@@ -27,7 +27,9 @@ public class GeneticSequencer extends AContainer {
 
     @Override
     public ItemStack getProgressBar() {
-        return GCEItems.POCKET_CHICKEN;
+        // 返回副本：Slimefun 渲染进度条时可能改写 ItemMeta，
+        // 直接交出 GCEItems.POCKET_CHICKEN 这个静态常量会污染全局物品模板。
+        return GCEItems.POCKET_CHICKEN.clone();
     }
 
     @Override
