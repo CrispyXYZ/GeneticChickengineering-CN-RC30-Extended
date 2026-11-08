@@ -22,6 +22,12 @@ options:
   heal-rate: 2
   # Should Water Eggs be able to be used in Nether environments
   allow-nether-water: false
+  # 64 种基因鸡的图鉴图标是否与原版方块隔离
+  # 图鉴图标传统上直接使用「该鸡的产物」作为材质（泥土鸡=泥土、下界合金鸡=下界合金锭），
+  # 这会导致图标与原版物品在背包里完全无法区分，进而被其他插件误判。
+  # 开启后：图标改用玩家头颅作基底，并在名称与 lore 中标注真实产物。
+  # 关闭后：恢复传统观感（图标即产物），但会重新暴露上述误判风险。
+  isolate-guide-icons: true
 commands:
   # Should commands be enabled
   enabled: true

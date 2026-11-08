@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>space.kiichan</groupId>
     <artifactId>GeneticChickengineering</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.3</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
